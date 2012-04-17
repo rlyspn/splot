@@ -1,0 +1,10 @@
+Plotting Library that uses matplotlib.
+
+Fields:
+logscale=<true|false>
+file=<data file name>
+title=title
+x_label=x label
+y_label=y label
+x_data=col_num
+(y_data=col_num,name)+
