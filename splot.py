@@ -1,32 +1,6 @@
 import sys
 import string
-
-class Plot:
-    """Class representing information about the plot to be generated."""
-
-    def __init__(self):
-        '''Initialization function for Plot.'''
-
-        #if log scale is on
-        self.log = False
-        #title for the graph
-        self.title = ''
-        #label for the x axis
-        self.x_label = ''
-        #label for the y axis
-        self.y_label = ''
-        #array of x data points
-        self.x_data = []
-        #{y_data_label:[y_data]} 
-        self.y_data = []
-
-    def __str__(self):
-        st = 'logscale=%s\n' % self.log
-        st += ('title=%s\nx label=%s\ny label=%s\n' % (self.title, self.x_label, self.y_label))
-        st += ('y data = ' + str(self.y_data))
-        st += '\n'
-        st += ('x data = ' + str(self.x_data))
-        return st
+from plot import *
 
 def readFile(fileName):
     '''Returns a string containing the contents of a file.'''
@@ -61,13 +35,12 @@ def getCol(fileName, col):
             returnData.append(float(line.split(' ')[col]))
     return returnData
 
-
 def parseYData(line, fileName):
     col_name = line[len('y_data='):]
     col = int(col_name[:col_name.find(',')])
-    name = col_name[col_name.find(','):]
+    name = col_name[col_name.find(',') + 1:]
     data = getCol(fileName, col)
-    return {name:data}
+    return (name,data)
 
 def parseXData(line, fileName):
     col = int(line[len('x_data='):])
@@ -109,7 +82,7 @@ def main():
         data = readFile(sys.argv[1])
         plot = parseInput(data)
         print plot
-
+        plotData(plot)
 
 if __name__ == '__main__':
     main()
