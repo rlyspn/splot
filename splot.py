@@ -22,7 +22,10 @@ class Plot:
 
     def __str__(self):
         st = 'logscale=%s\n' % self.log
-        st += ('title=%s\nx label=%s\ny label=%s' % (self.title, self.x_label, self.y_label))
+        st += ('title=%s\nx label=%s\ny label=%s\n' % (self.title, self.x_label, self.y_label))
+        st += ('y data = ' + str(self.y_data))
+        st += '\n'
+        st += ('x data = ' + str(self.x_data))
         return st
 
 def readFile(fileName):
@@ -50,8 +53,31 @@ def parseYLabel(line):
 def parseDataFile(line):
     return line[len('file='):]
 
+def getCol(fileName, col):
+    returnData = []
+    data = readFile(fileName).split('\n')
+    for line in data:
+        if len(line) > 0:
+            returnData.append(float(line.split(' ')[col]))
+    return returnData
+
+
+def parseYData(line, fileName):
+    col_name = line[len('y_data='):]
+    col = int(col_name[:col_name.find(',')])
+    name = col_name[col_name.find(','):]
+    data = getCol(fileName, col)
+    return {name:data}
+
+def parseXData(line, fileName):
+    col = int(line[len('x_data='):])
+    data = getCol(fileName, col)
+    return data
+
 def parseInput(inputData):
-    
+    '''@param inputData - copy of the data from the splot input file.
+    @return-returns an instance of the plot object'''
+
     p = Plot()
     data = inputData.split('\n')
     for line in data:
@@ -66,14 +92,17 @@ def parseInput(inputData):
         #get file
         elif line.find('file') == 0:
             dataFile = parseDataFile(line)
-            #get x data
-            #get y data
+        elif line.find('y_data') == 0:
+            p.y_data.append(parseYData(line, dataFile))
+        elif line.find('x_data') == 0:
+            p.x_data = parseXData(line, dataFile)
         else:
             print 'Error: %s is an unknown command. Ignoring.' % line
     return p
 
 def main():
     """Main function used as a driver."""
+
     if len(sys.argv) != 2:
         raise IOError("Error: incorrect input: splot <filename>")
     else:
