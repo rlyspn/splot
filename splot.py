@@ -73,6 +73,16 @@ def parseInput(inputData):
             print 'Error: %s is an unknown command. Ignoring.' % line
     return p
 
+def assignColors(pl):
+
+    colors = ['blue', 'red', 'green', 'cyan', 'magenta', 'yellow', 'black']
+    colorIndex = 0
+    for ind in range(len(pl.y_data)):
+        newTuple = (pl.y_data[ind][0], pl.y_data[ind][1], colors[colorIndex])
+        pl.y_data[ind] = newTuple
+        colorIndex = (colorIndex + 1) % len(colors)
+    return pl
+
 def main():
     """Main function used as a driver."""
 
@@ -81,6 +91,8 @@ def main():
     else:
         data = readFile(sys.argv[1])
         plot = parseInput(data)
+        plot = assignColors(plot)
+        #assign colors to graphs
         print plot
         plotData(plot)
 
