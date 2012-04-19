@@ -1,4 +1,4 @@
-Plotting Library that uses matplotlib.
+Plotting script that uses matplotlib.
 
 Fields:
 logscale=<true|false>
@@ -8,3 +8,5 @@ x_label=x label
 y_label=y label
 x_data=col_num
 (y_data=col_num,name)+
+
+Wrote this for my own use but may be helpful for others.  It may or may not be updated in the future.
